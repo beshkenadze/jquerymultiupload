@@ -1,0 +1,119 @@
+@CHARSET "UTF-8";
+
+.button{
+    border: 0;
+    background: url(../images/button.png) no-repeat 0px 0px;
+	text-align:center;
+	width:85px;
+	font-size:10px;
+	height:21px;
+}
+.status {
+	font-size: 8pt;
+    color: #D6D6D6;
+	margin-left:5px;
+}
+.error{
+	left: 5px;
+	width:12px;
+	height:12px;
+	color:green;
+	opacity:0.5;
+}
+.error{
+	color:red;	
+}
+.status span {
+	position:relative;
+	top:0px;
+}
+.loader {
+	position:relative;
+	top:2px;
+	margin:0 1px 0 5px;
+}
+.loader img {
+	width:12px;
+	height:12px;
+}
+
+.file {
+    font-family: Verdana;
+    font-size: 8pt;
+    color: Gray;
+	list-style:none;
+	padding:0 15px 2px 20px;
+	margin:5px;
+	background:url(../images/icons.png) no-repeat 0px -176px;
+}
+.remove,.upload,.ok {
+	width:12px;
+	height:12px;
+	cursor:pointer;
+	padding:0px 6px;
+	margin:0 5px;
+}
+.remove {
+	background:url(../images/remove.png) no-repeat 0px 0px;
+}
+.upload {
+	background:url(../images/upload.png) no-repeat 0px 0px;
+}
+.ok {
+	margin:0 8px;
+	background:url(../images/ok.png) no-repeat 0px 0px;
+}
+
+.doc,.bmp,.jpg, .jpeg,.png,.gif,.psd,.mp3,.wav,.ogg,.avi,.wmv,.wma,.flv,.pdf,.exe,.txt {
+}
+.doc {
+	background:url(../images/ext/icons.png) no-repeat 0px 0px;
+}
+.bmp {
+	background:url(../images/ext/icons.png) no-repeat 0px -16px;
+}
+.jpg {
+	background:url(../images/ext/icons.png) no-repeat 0px -32px;
+}
+.jpeg {
+	background:url(../images/ext/icons.png) no-repeat 0px -32px;
+}
+.png {
+	background:url(../images/ext/icons.png) no-repeat 0px -48px;
+}
+.gif {
+	background:url(../images/ext/icons.png) no-repeat 0px -64px;
+}
+.psd {
+	background:url(../images/ext/icons.png) no-repeat 0px -80px;
+}
+.wav {
+	background:url(../images/ext/icons.png) no-repeat 0px -96px;
+}
+.ogg {
+	background:url(../images/ext/icons.png) no-repeat 0px -96px;
+}
+.mp3 {
+	background:url(../images/ext/icons.png) no-repeat 0px -96px;
+}
+.wma {
+	background:url(../images/ext/icons.png) no-repeat 0px -96px;
+}
+.avi {
+	background:url(../images/ext/icons.png) no-repeat 0px -112px;
+}
+.wmv {
+	background:url(../images/ext/icons.png) no-repeat 0px -112px;
+}
+.flv {
+	background:url(../images/ext/icons.png) no-repeat 0px -112px;
+}
+.pdf {
+	background:url(../images/ext/icons.png) no-repeat 0px -128px;
+}
+.exe {
+	background:url(../images/ext/icons.png) no-repeat 0px -144px;
+}
+.txt {
+	background:url(../images/ext/icons.png) no-repeat 0px -160px;
+}
