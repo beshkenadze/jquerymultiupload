@@ -59,6 +59,7 @@ $.multiUpload = function(options) {
 			return;
 		}
 		if (!window.google || !window.google.gears) {
+			var message = 'Install Gears for multiupload support.';
 			var url = 'http://gears.google.com/?action=install' +
 			'&message=' +
 			encodeURIComponent(message) +
