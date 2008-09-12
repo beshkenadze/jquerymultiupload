@@ -6,14 +6,15 @@
 <link rel="stylesheet" type="text/css" href="css/sample.css">
 </head>
 <body>
-<button class="button" id="browseButton">Add Files</button>
-
+<p>
+	<button class="button" id="browseButton">Add Files</button>
+	<button class="button" id="clear">Clear</button>
+</p>
 <ul id="files">
-	
 </ul>
 <p>
 	<button class="button" id="upload">Upload</button>
-	<button class="button" id="clear">Clear</button>
+	<button class="button" id="abort">Abort upload</button>
 </p>
 <script src="http://www.google.com/jsapi"></script>
 <script>
@@ -50,10 +51,10 @@ window.onload = function (){
 	]
 	$.multiUpload({
 		browse_button:'#browseButton',
-		upload_after_select:false,
+		upload_after_select:1,
 		max_file_size:(20000*1024),
 		filter:filters,
-		serial:true
+		serial:false
 	});
 	$('#clear').click(function(){
 		$('.file').remove();

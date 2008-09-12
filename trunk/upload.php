@@ -2,7 +2,7 @@
 
 /* PUT data comes in on the stdin stream */
 $putdata = fopen("php://input", "r");
-$name = $_REQUEST['name'];
+$name = trim($_REQUEST['name']);
 /* Open a file for writing */
 $fp = fopen("files/".$name, "w");
 if($fp){
