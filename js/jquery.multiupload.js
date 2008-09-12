@@ -116,7 +116,7 @@ $.multiUpload = function(options) {
 				.bind('click',function(e){
 					var i = $(this).attr('id').replace(/bind_/,'');
 					//$.multiUpload.request(i);
-					$.multiUpload.file.item.request({
+					$.multiUpload.request($.multiUpload.file.item,{
 						element: $('#file_'+i),
 						status: $('#status_'+i),
 					});
@@ -131,7 +131,7 @@ $.multiUpload = function(options) {
 				.appendTo(element);
 			}else if(check && vars.upload_after_select) {
 				//$.multiUpload.request(i);
-				$.multiUpload.file.item.request({
+				$.multiUpload.request($.multiUpload.file.item,{
 						element: $('#file_'+i),
 						status: $('#status_'+i),
 				});
