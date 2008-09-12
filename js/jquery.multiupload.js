@@ -88,6 +88,7 @@ $.multiUpload = function(options) {
 			$.each(files,function(i,value){
 				var count_id = $('.file').count()+1;
 				$.multiUpload.file(count_id,value);
+				$.multiUpload.file.array[count_id]=value;
 			})
 		},{ filter: vars.filter });
 	}
@@ -97,6 +98,7 @@ $.multiUpload = function(options) {
 	$.multiUpload.file = function(i,file){
 		$.multiUpload.file.i = i;
 		$.multiUpload.file.item = file;
+		
 		var fileinfo = $.multiUpload.func.getFileInfo();
 		var element = $('<li/>')
 		.attr('id','file_'+i)
@@ -150,6 +152,7 @@ $.multiUpload = function(options) {
 				}).addClass('remove').attr('title', 'Remove file').html('').attr('id', 'del_' + i).appendTo(element);
 			}
 	};
+	$.multiUpload.file.array = new Array;
 	/*
 	 * $.multiUpload.loader.*;
 	 ****************/
@@ -173,7 +176,7 @@ $.multiUpload = function(options) {
 			upload_url:'upload.php',
 			serial:false
 		};
-		
+//		var file = $.multiUpload.file.array[i];
 		var opts = $.extend(vars, options);
 		var request = google.gears.factory.create('beta.httprequest');
 		var i = $(vars.element).attr('id').replace(/file_/,'');
@@ -182,8 +185,7 @@ $.multiUpload = function(options) {
 		}
 		$("#bind_"+i).remove();
 		$("#del_"+i).remove();
-		request.open('POST', vars.upload_url);
-        request.setRequestHeader('name',file.name);
+		request.open('POST', vars.upload_url+"?name="+file.name);
 		$.multiUpload.loader.start(i);
         request.send(file.blob);
 		request.upload.onprogress = function(req){
@@ -193,6 +195,7 @@ $.multiUpload = function(options) {
 		request.onreadystatechange = function() {
 	        if (request.readyState == 4) {
 				var link = request.responseText;
+			//console.log(link);
 				$(vars.status).empty();
 				$(vars.status).addClass('ok')
 				.removeClass('ready');
@@ -218,14 +221,16 @@ $.multiUpload = function(options) {
 		var files = $('.ready');
 		if($.multiUpload.check(files)){
 			if(vars.serial){
-				$.multiUpload.request($.multiUpload.file.item,{
+				var i = $($(files[0]).parent()).attr('id').replace(/file_/,'');
+				$.multiUpload.request($.multiUpload.file.array[i],{
 					element: $(files[0]).parent(),
 					status: $(files[0]),
 					serial:vars.serial
 				});
 			}else{
 				$.each(files,function(i,item){
-					$.multiUpload.request($.multiUpload.file.item,{
+					var i = $($(item).parent()).attr('id').replace(/file_/,'');
+					$.multiUpload.request($.multiUpload.file.array[i],{
 						element: $(item).parent(),
 						status: $(item),
 					});
