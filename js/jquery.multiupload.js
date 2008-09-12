@@ -115,7 +115,11 @@ $.multiUpload = function(options) {
 				var upload = $('<span/>')
 				.bind('click',function(e){
 					var i = $(this).attr('id').replace(/bind_/,'');
-					$.multiUpload.request(i);
+					//$.multiUpload.request(i);
+					$.multiUpload.file.item.request({
+						element: $('#file_'+i),
+						status: $('#status_'+i),
+					});
 					$("#bind_"+i).remove();
 					$("#del_"+i).remove();
 					return false;
@@ -126,7 +130,11 @@ $.multiUpload = function(options) {
 				.attr('id','bind_'+i)
 				.appendTo(element);
 			}else if(check && vars.upload_after_select) {
-				$.multiUpload.request(i);
+				//$.multiUpload.request(i);
+				$.multiUpload.file.item.request({
+						element: $('#file_'+i),
+						status: $('#status_'+i),
+				});
 			}else{
 				$(status)
 				.addClass('error')
@@ -161,40 +169,47 @@ $.multiUpload = function(options) {
 	/*
 	 * $.multiUpload.request
 	 ***********************/
-	$.multiUpload.request = function (i){
+	$.multiUpload.request = function(file,options){
+		var vars = {
+			element: $('#file_0'),
+			status: $('#status_0'),
+			upload_url:'upload.php'
+		};
+		
+		var opts = $.extend(vars, options);
 		var request = google.gears.factory.create('beta.httprequest');
-		var file = $.multiUpload.file.item;
-		$.multiUpload.request.i = i;
-		$.multiUpload.request.status = $('#status_'+i);
+		var i = $(vars.element).attr('id').replace(/file_/,'');
+		if(!file){
+			return;
+		}
 		request.open('POST', vars.upload_url);
         request.setRequestHeader('name',file.name);
 		$.multiUpload.loader.start(i);
         request.send(file.blob);
 		request.upload.onprogress = function(req){
-			//TODO: Fix percent
-			//var percent = Math.round((req.loaded/req.total)*100);
-			//var status = $.multiUpload.request.status;
-			//$(status).html(percent+'%');
+			var percent = Math.round((req.loaded/req.total)*100);
+			$(vars.status).html(percent+'%');
 		};
 		request.onreadystatechange = function() {
 	        if (request.readyState == 4) {
-				var status = $('#file_'+i+' .status');
-				$(status).empty();
-				$(status).addClass('ok')
+				$(vars.status).empty();
+				$(vars.status).addClass('ok')
 				.removeClass('ready');
 				$.multiUpload.loader.stop(i);
-				$('#file_'+i).removeAttr('id');
+				$(vars.element).removeAttr('id');
 	        }
         };
-	}
+	};
 	$.multiUpload.request.all = function(){
 		var files = $('.ready');
 		$('.upload').remove();
 		$('.remove').remove();
 		if($.multiUpload.check(files)){
 			$.each(files,function(i,item){
-				var i = $(item).parent().attr('id').replace(/file_/,'');
-				$.multiUpload.request(i);
+				$.multiUpload.request($.multiUpload.file.item,{
+						element: $(item).parent(),
+						status: $(item),
+				});
 			});
 		}
 	}
@@ -225,10 +240,10 @@ $.multiUpload = function(options) {
         var ext = fileTitle.replace(RegExExt, "$1");
 		return file = {name:fileTitle,ext:ext}
 	}
-	jQuery.fn.count = function (){
-		return $(this).length
-	}
 	this.init();
 	return this;
 };
 })(jQuery);
+jQuery.fn.count = function (){
+	return $(this).length
+}
