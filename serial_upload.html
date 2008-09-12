@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Demo jQuery Multiple File Upload Plugin v. $Rev$</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="css/sample.css">
+</head>
+<body>
+<button class="button" id="browseButton">Add Files</button>
+
+<ul id="files">
+	
+</ul>
+<p>
+	<button class="button" id="upload">Upload</button>
+	<button class="button" id="clear">Clear</button>
+</p>
+<script src="http://www.google.com/jsapi"></script>
+<script>
+google.load("jquery", "1");
+window.onload = function (){
+	var filters = [
+	'application/ogg',
+	'application/xhtml+xml',
+	'application/xml-dtd',
+	'application/json',
+	'application/zip',
+	'audio/mpeg',
+	'audio/x-ms-wma',
+	'audio/vnd.rn-realaudi',
+	'audio/x-wav',
+	'image/gif',
+	'image/jpeg',
+	'image/png',
+	'image/tiff',
+	'image/vnd.microsoft.icon',
+	'text/css',
+	'text/html',
+	'text/javascript',
+	'text/plain',
+	'text/xml',
+	'video/mpeg',
+	'video/mp4',
+	'video/quicktime',
+	'video/x-ms-wmv',
+	'application/vnd.ms-excel',
+	'application/vnd.ms-powerpoint',
+	'application/msword',
+	'application/vnd.mozilla.xul+xml'
+	]
+	$.multiUpload({
+		browse_button:'#browseButton',
+		upload_after_select:false,
+		max_file_size:(20000*1024),
+		filter:filters,
+		serial:true
+	});
+	$('#clear').click(function(){
+		$('.file').remove();
+	});
+}
+</script>
+<script type="text/javascript" src="http://jquerygears.googlecode.com/svn/trunk/jquery.gears.js"></script>
+<script type="text/javascript" src="/js/jquery.multiupload.js"></script>
+</body>
+</html>

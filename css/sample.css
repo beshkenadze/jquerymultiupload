@@ -46,7 +46,7 @@
 	margin:5px;
 	background:url(../images/icons.png) no-repeat 0px -176px;
 }
-.remove,.upload,.ok {
+.remove,.upload,.ok,.download {
 	width:12px;
 	height:12px;
 	cursor:pointer;
@@ -55,6 +55,10 @@
 }
 .remove {
 	background:url(../images/remove.png) no-repeat 0px 0px;
+}
+.download {
+	margin:0;
+	background:url(../images/download.png) no-repeat 0px 0px;
 }
 .upload {
 	background:url(../images/upload.png) no-repeat 0px 0px;
