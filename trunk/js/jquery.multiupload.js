@@ -29,7 +29,8 @@ $.multiUpload = function(options) {
 		upload_url:'/upload.php',
 		filter: ['image/jpg','image/jpeg','image/gif','image/png'],
 		upload_after_select: false,
-		factory: 'gears'
+		factory: 'gears',
+		serial:false
 	};
 	var opts = $.extend(vars, options);
 	this.init = function(){
@@ -141,17 +142,13 @@ $.multiUpload = function(options) {
 				.html($.multiUpload.file.error)
 				.appendTo(element);
 			}
-			var del = $('<span/>')
-			.bind('click',function(e){
-				var i = $(this).attr('id').replace(/del_/,'');
-				$('#file_'+i).remove();
-				return false;
-			})
-			.addClass('remove')
-			.attr('title','Remove file')
-			.html('')
-			.attr('id','del_'+i)
-			.appendTo(element);
+			if (!vars.upload_after_select) {
+				var del = $('<span/>').bind('click', function(e){
+					var i = $(this).attr('id').replace(/del_/, '');
+					$('#file_' + i).remove();
+					return false;
+				}).addClass('remove').attr('title', 'Remove file').html('').attr('id', 'del_' + i).appendTo(element);
+			}
 	};
 	/*
 	 * $.multiUpload.loader.*;
@@ -173,7 +170,8 @@ $.multiUpload = function(options) {
 		var vars = {
 			element: $('#file_0'),
 			status: $('#status_0'),
-			upload_url:'upload.php'
+			upload_url:'upload.php',
+			serial:false
 		};
 		
 		var opts = $.extend(vars, options);
@@ -182,6 +180,8 @@ $.multiUpload = function(options) {
 		if(!file){
 			return;
 		}
+		$("#bind_"+i).remove();
+		$("#del_"+i).remove();
 		request.open('POST', vars.upload_url);
         request.setRequestHeader('name',file.name);
 		$.multiUpload.loader.start(i);
@@ -192,25 +192,45 @@ $.multiUpload = function(options) {
 		};
 		request.onreadystatechange = function() {
 	        if (request.readyState == 4) {
+				var link = request.responseText;
 				$(vars.status).empty();
 				$(vars.status).addClass('ok')
 				.removeClass('ready');
 				$.multiUpload.loader.stop(i);
 				$(vars.element).removeAttr('id');
+				var download = $('<a/>')
+				.addClass('download')
+				.attr('target','_blank')
+				.attr('href',link)
+				.attr('title','Download file')
+				.appendTo(vars.element);
+				if(vars.serial){
+					if($(vars.element).next().count()){
+						if($(vars.element).next().children('.ready')){
+							$.multiUpload.request.all();
+						}
+					}
+				}
 	        }
         };
 	};
 	$.multiUpload.request.all = function(){
 		var files = $('.ready');
-		$('.upload').remove();
-		$('.remove').remove();
 		if($.multiUpload.check(files)){
-			$.each(files,function(i,item){
+			if(vars.serial){
 				$.multiUpload.request($.multiUpload.file.item,{
+					element: $(files[0]).parent(),
+					status: $(files[0]),
+					serial:vars.serial
+				});
+			}else{
+				$.each(files,function(i,item){
+					$.multiUpload.request($.multiUpload.file.item,{
 						element: $(item).parent(),
 						status: $(item),
+					});
 				});
-			});
+			}
 		}
 	}
 	/* $.multiUpload.func
@@ -241,7 +261,7 @@ $.multiUpload = function(options) {
 		return file = {name:fileTitle,ext:ext}
 	}
 	this.init();
-	return this;
+	return $.multiUpload;
 };
 })(jQuery);
 jQuery.fn.count = function (){
