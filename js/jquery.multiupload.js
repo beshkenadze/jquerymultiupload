@@ -25,6 +25,7 @@ $.multiUpload = function(options) {
 		file_place: '#files',
 		browse_button:'#browse',
 		upload_button:'#upload',
+		abort_button:'#abort',
 		max_file_size:20000,
 		upload_url:'/upload.php',
 		filter: ['image/jpg','image/jpeg','image/gif','image/png'],
@@ -41,6 +42,16 @@ $.multiUpload = function(options) {
 		if(!$.multiUpload.check(vars.browse_button)){
 			alert('Element '+vars.browse_button+' not found.');
 			return;
+		}
+		if(!$.multiUpload.check(vars.abort_button)){
+			alert('Element '+vars.abort_button+' not found.');
+			return;
+		}else{
+			$(vars.abort_button).click(function(e){
+				$.each($.multiUpload.obj.request,function(i,item){
+					item.abort();
+				})
+			});
 		}
 		if(!$.multiUpload.check(vars.upload_button)){
 			alert('Element '+vars.upload_button+' not found.');
@@ -72,7 +83,7 @@ $.multiUpload = function(options) {
 			return false;
 		}
 		$(vars.browse_button).bind("click",function(e){
-					$.multiUpload.browse();
+			$.multiUpload.browse();
 		});
 	}
 	$.multiUpload.check = function(id){
@@ -98,11 +109,10 @@ $.multiUpload = function(options) {
 	$.multiUpload.file = function(i,file){
 		$.multiUpload.file.i = i;
 		$.multiUpload.file.item = file;
-		
 		var fileinfo = $.multiUpload.func.getFileInfo();
 		var element = $('<li/>')
 		.attr('id','file_'+i)
-		.html(fileinfo.name)
+		.html('<span class="filename">'+fileinfo.name+'</span>')
 		.addClass('file')
 		.addClass(fileinfo.ext)
 		.appendTo($(vars.file_place));
@@ -159,8 +169,7 @@ $.multiUpload = function(options) {
 	$.multiUpload.loader={};
 	$.multiUpload.loader.start = function (i){
 		var element = $('#file_'+i);
-		if(i=='undefined')	var i = $.multiUpload.file.i;
-		$.multiUpload.ajaxloader = $('<span/>').attr('id','loader_'+i).html('<img src="images/loader.gif" />').addClass('loader').appendTo(element);
+		$('<span/>').width('0').attr('id','loader_'+i).addClass('loader').appendTo(element);
 	}
 	$.multiUpload.loader.stop = function (i){
 		if(i=='undefined')	var i = $.multiUpload.file.i;
@@ -183,6 +192,7 @@ $.multiUpload = function(options) {
 		if(!file){
 			return;
 		}
+		$.multiUpload.obj.request[i]=request;
 		$("#bind_"+i).remove();
 		$("#del_"+i).remove();
 		request.open('POST', vars.upload_url+"?name="+file.name);
@@ -190,7 +200,11 @@ $.multiUpload = function(options) {
         request.send(file.blob);
 		request.upload.onprogress = function(req){
 			var percent = Math.round((req.loaded/req.total)*100);
-			$(vars.status).html(percent+'%');
+			var filename = $(vars.status).parents().children('.filename');
+			var total = filename.width()/100;
+			var loader = $(vars.status).parents().children('.loader');
+			//$(vars.status).html(percent+'%');
+			loader.css('width',total*percent);
 		};
 		request.onreadystatechange = function() {
 	        if (request.readyState == 4) {
@@ -199,7 +213,7 @@ $.multiUpload = function(options) {
 				$(vars.status).empty();
 				$(vars.status).addClass('ok')
 				.removeClass('ready');
-				$.multiUpload.loader.stop(i);
+				//$.multiUpload.loader.stop(i);
 				$(vars.element).removeAttr('id');
 				var download = $('<a/>')
 				.addClass('download')
@@ -217,6 +231,7 @@ $.multiUpload = function(options) {
 	        }
         };
 	};
+	$.multiUpload.request.array = {};
 	$.multiUpload.request.all = function(){
 		var files = $('.ready');
 		if($.multiUpload.check(files)){
@@ -238,6 +253,10 @@ $.multiUpload = function(options) {
 			}
 		}
 	}
+	/* $.multiUpload.func
+	 ***********************/
+	$.multiUpload.obj={};
+	$.multiUpload.obj.request = {};
 	/* $.multiUpload.func
 	 ***********************/
 	$.multiUpload.func = {};
