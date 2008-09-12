@@ -2,7 +2,7 @@
 
 /* PUT data comes in on the stdin stream */
 $putdata = fopen("php://input", "r");
-$name = $_SERVER['HTTP_NAME'];
+$name = $_REQUEST['name'];
 /* Open a file for writing */
 $fp = fopen("files/".$name, "w");
 if($fp){
@@ -11,11 +11,11 @@ if($fp){
     /* Close the streams */
     fclose($fp);
     fclose($putdata);
-    // Delete upload file
-    unlink("files/".$name);
+    //unlink("files/".$name);
+    
 }else{
     die("can't open file to write");
 }
-
+echo '/files/'.$name;
 ?>
 
