@@ -64,27 +64,25 @@ $.multiUpload = function(options) {
 		switch(vars.factory)
 		{
 		case 'gears':
-			$.gears();
+			if ($.gears.init()) {
+				var init = true;
+			}else{
+				var init = false;
+				$.gears.install();
+				return;
+			}
 		  	break;
 		default:
 			alert('Factory not found');
 			return;
 		}
-		if (!window.google || !window.google.gears) {
-			var message = 'Install Gears for multiupload support.';
-			var url = 'http://gears.google.com/?action=install' +
-			'&message=' +
-			encodeURIComponent(message) +
-			'&return=' +
-			encodeURIComponent(window.location.href);
-			$(vars.browse_button).html('<u>Click to install ' +
-			'Gears to enable multifile upload!</u>');
-			$(vars.browse_button).bind('click',function(e){window.location.href=url})
-			return false;
-		}
+		alert(vars.browse_button);
 		$(vars.browse_button).bind("click",function(e){
 			$.multiUpload.browse();
 		});
+		if(!init){
+			return false;
+		}
 	}
 	$.multiUpload.check = function(id){
 		if($(id).length > 0){
@@ -94,7 +92,7 @@ $.multiUpload = function(options) {
 		}
 	}
 	$.multiUpload.browse = function () {
-		var desktop = google.gears.factory.create('beta.desktop');
+		var desktop = $.gears.factory('beta.desktop');
 		desktop.openFiles(function(files){
 			$.each(files,function(i,value){
 				var count_id = $('.file').count()+1;
@@ -187,7 +185,7 @@ $.multiUpload = function(options) {
 		};
 //		var file = $.multiUpload.file.array[i];
 		var opts = $.extend(vars, options);
-		var request = google.gears.factory.create('beta.httprequest');
+		var request = $.gears.factory('beta.httprequest');
 		var i = $(vars.element).attr('id').replace(/file_/,'');
 		if(!file){
 			return;
