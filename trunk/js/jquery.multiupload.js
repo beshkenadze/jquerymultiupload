@@ -76,7 +76,6 @@ $.multiUpload = function(options) {
 			alert('Factory not found');
 			return;
 		}
-		alert(vars.browse_button);
 		$(vars.browse_button).bind("click",function(e){
 			$.multiUpload.browse();
 		});
